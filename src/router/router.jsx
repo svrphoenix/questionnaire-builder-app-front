@@ -4,6 +4,7 @@ import QuestionnairesListPage from '../pages/QuestionnairesListPage';
 import CreateQuestionnairePage from '../pages/CreateQuestionnairePage';
 import QuestionnairePage from '../pages/QuestionnairePage';
 import EditQuestionnairePage from '../pages/EditQuestionnairePage';
+import NotFoundPage from '../pages/NotFoundPage/NotFoundPage';
 
 const router = createBrowserRouter([
   {
@@ -17,9 +18,10 @@ const router = createBrowserRouter([
         element: <EditQuestionnairePage />,
         children: [{ path: ':id', element: <EditQuestionnairePage /> }],
       },
-      { path: '/interactive', element: <QuestionnairePage /> },
+      { path: '/interactive/:id', element: <QuestionnairePage /> },
     ],
   },
+  { path: '*', element: <NotFoundPage /> },
 ]);
 
 export default router;

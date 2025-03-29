@@ -1,19 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Card, Col, Container, Row } from 'react-bootstrap';
-import CustomDropdownMenu from '../CustomDropdownMenu/CustomDropdownMenu';
-import { useNavigate } from 'react-router-dom';
+import {
+  Alert,
+  Button,
+  Col,
+  Container,
+  OverlayTrigger,
+  Row,
+  Tooltip,
+} from 'react-bootstrap';
 
-const QuestionnairesList = ({ questionnaires }) => {
+import { useNavigate } from 'react-router-dom';
+import QuestionnaireCard from '../QuestionnaireCard/QuestionnaireCard';
+
+const QuestionnairesList = ({ questionnaires, onDelete }) => {
   const navigate = useNavigate();
 
+  const renderTooltip = props => (
+    <Tooltip {...props}>Add questionnaire</Tooltip>
+  );
+
   return (
-    <Container>
+    <Container
+      fluid
+      className="mt-4 p-4 border border-secondary rounded bg-white"
+    >
       <div className="d-flex justify-content-end">
-        <Button className="rounded-circle" onClick={() => navigate('/builder')}>
-          +
-        </Button>
+        <OverlayTrigger placement="bottom" overlay={renderTooltip}>
+          <Button
+            className="rounded-circle"
+            onClick={() => navigate('/builder')}
+          >
+            +
+          </Button>
+        </OverlayTrigger>
       </div>
+      {!questionnaires.length && (
+        <Alert className="mt-2 text-center">You have no questionnaires</Alert>
+      )}
       <Row
         xs={1}
         sm={2}
@@ -24,23 +48,7 @@ const QuestionnairesList = ({ questionnaires }) => {
       >
         {questionnaires.map(item => (
           <Col key={item.Id} as="li">
-            <Card className="bg-dark text-white" border="warning">
-              <Card.Body className="p-0">
-                <Card.Header className="p-2 d-flex justify-content-between  align-items-center border-warning">
-                  <Card.Title className="m-0 text-info">{item.Name}</Card.Title>
-                  <CustomDropdownMenu quizId={item.Id} />
-                </Card.Header>
-                <Container className="p-3">
-                  <Card.Text>{item.Description}</Card.Text>
-                  <Card.Text className="text-info mb-0">
-                    Questions: {item.QuestionCount}
-                  </Card.Text>
-                  <Card.Text className="text-warning">
-                    Comleted: {item.CompletionCount}
-                  </Card.Text>
-                </Container>
-              </Card.Body>
-            </Card>
+            <QuestionnaireCard item={item} onDelete={onDelete} />
           </Col>
         ))}
       </Row>

@@ -88,8 +88,9 @@ const QuestionnaireBuilder = ({ questionnaire }) => {
     };
     if (questionnaire?.id) {
       await updateQuestionnaire(questionnaire.id, savingQuestionnaire);
+    } else {
+      await saveQuestionnaire(savingQuestionnaire);
     }
-    await saveQuestionnaire(savingQuestionnaire);
     navigate('/');
   };
 

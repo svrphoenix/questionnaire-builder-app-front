@@ -1,0 +1,43 @@
+.questionnaire-card {
+  max-width: 360px;
+  height: 240px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .header {
+    @extend .border-warning;
+    @extend .d-flex;
+    @extend .align-items-center;
+    @extend .justify-content-between;
+    padding: 10px;
+  }
+
+  .name {
+    @extend .text-info;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 70%;
+  }
+
+  .content {
+    flex-grow: 1;
+    overflow: hidden;
+
+    .description {
+      white-space: wrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+      height: 80px;
+    }
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-top: 10px;
+  }
+}

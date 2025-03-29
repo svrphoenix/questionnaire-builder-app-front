@@ -89,6 +89,14 @@ svg {
 
 .page-header {
   @extend .py-3;
+  @extend .m-0;
   @extend .text-primary;
   @extend .text-center;
+}
+
+@media (max-width: 768px) {
+  .questionnaire-card {
+    max-width: 100%;
+    height: auto;
+  }
 }

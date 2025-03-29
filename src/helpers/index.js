@@ -1,6 +1,6 @@
 export const transformQuestions = inputArray => {
   return inputArray.map((question, index) => ({
-    id: Date.now() + index,
+    id: question.Id ? question.Id : Date.now() + index,
     text: question.QuestionText,
     type: question.QuestionType,
     choices:
@@ -9,3 +9,15 @@ export const transformQuestions = inputArray => {
         : null,
   }));
 };
+
+// export const prepareQuestionnaire = inputArray =>
+//   inputArray.map((question, index) => ({
+//     id: question.Id ? question.Id : Date.now() + index,
+//     text: question.QuestionText || '',
+//     type: question.QuestionType || 'text',
+//     choices:
+//       question.Choices?.map(choice => ({
+//         id: choice.ChoiceId || Date.now() + index + Math.random(),
+//         text: choice.ChoiceText || '',
+//       })) || [],
+//   }));

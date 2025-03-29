@@ -7,8 +7,12 @@ import Navigation from './components/Navigation/Navigation';
 const App = () => {
   return (
     <>
-      <Navigation />
-      <Outlet />
+      <header>
+        <Navigation />
+      </header>
+      <main>
+        <Outlet />
+      </main>
       <Toaster position="top-right" />
     </>
   );
