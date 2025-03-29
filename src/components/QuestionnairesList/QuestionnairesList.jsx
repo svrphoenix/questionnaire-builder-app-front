@@ -6,27 +6,39 @@ import { useNavigate } from 'react-router-dom';
 
 const QuestionnairesList = ({ questionnaires }) => {
   const navigate = useNavigate();
+
   return (
     <Container>
       <div className="d-flex justify-content-end">
-        <Button onClick={() => navigate('/builder')}>+</Button>
+        <Button className="rounded-circle" onClick={() => navigate('/builder')}>
+          +
+        </Button>
       </div>
-      <Row xs={1} className="mt-1 g-4 justify-content-center" as="ul">
+      <Row
+        xs={1}
+        sm={2}
+        md={3}
+        lg={4}
+        className="my-2 g-4 p-0 justify-content-center align-items-start"
+        as="ul"
+      >
         {questionnaires.map(item => (
-          <Col key={item.Id} style={{ width: '18rem' }} as="li">
-            <Card>
-              <Card.Body>
-                <Card.Header className="d-flex justify-content-between">
-                  <Card.Title>{item.Name}</Card.Title>
-                  <CustomDropdownMenu />
+          <Col key={item.Id} as="li">
+            <Card className="bg-dark text-white" border="warning">
+              <Card.Body className="p-0">
+                <Card.Header className="p-2 d-flex justify-content-between  align-items-center border-warning">
+                  <Card.Title className="m-0 text-info">{item.Name}</Card.Title>
+                  <CustomDropdownMenu quizId={item.Id} />
                 </Card.Header>
-                <Card.Text>{item.Description}</Card.Text>
-                <Card.Text className="text-success mb-0">
-                  Questions: {item.QuestionCount}
-                </Card.Text>
-                <Card.Text className="text-warning">
-                  Comleted: {item.CompletionCount}
-                </Card.Text>
+                <Container className="p-3">
+                  <Card.Text>{item.Description}</Card.Text>
+                  <Card.Text className="text-info mb-0">
+                    Questions: {item.QuestionCount}
+                  </Card.Text>
+                  <Card.Text className="text-warning">
+                    Comleted: {item.CompletionCount}
+                  </Card.Text>
+                </Container>
               </Card.Body>
             </Card>
           </Col>

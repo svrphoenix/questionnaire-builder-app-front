@@ -1,0 +1,8 @@
+.navbar-nav .nav-link {
+  color: white;
+
+  &.active {
+    color: black !important;
+    @extend .bg-light;
+  }
+}

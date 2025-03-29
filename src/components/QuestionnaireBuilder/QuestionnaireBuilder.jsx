@@ -2,8 +2,14 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { ChoiceType } from '../../constants';
+import {
+  saveQuestionnaire,
+  updateQuestionnaire,
+} from '../../services/API/questionnaireServices';
+import { useNavigate } from 'react-router-dom';
 
 const QuestionnaireBuilder = ({ questionnaire }) => {
+  const navigate = useNavigate();
   const initialQuestion = {
     id: Date.now(),
     text: '',
@@ -14,8 +20,12 @@ const QuestionnaireBuilder = ({ questionnaire }) => {
   const [questions, setQuestions] = useState(
     questionnaire ? questionnaire.questions : [initialQuestion]
   );
-  const [questionnaireName, setQuestionnaireName] = useState('');
-  const [questionnaireDescription, setQuestionnaireDescription] = useState('');
+  const [questionnaireName, setQuestionnaireName] = useState(
+    questionnaire ? questionnaire.name : ''
+  );
+  const [questionnaireDescription, setQuestionnaireDescription] = useState(
+    questionnaire ? questionnaire.description : ''
+  );
 
   const addQuestion = () => {
     setQuestions([...questions, initialQuestion]);
@@ -26,7 +36,10 @@ const QuestionnaireBuilder = ({ questionnaire }) => {
 
     if (field === 'type') {
       if (value === ChoiceType.single || value === ChoiceType.multiple) {
-        updatedQuestions[index].choices = ['', ''];
+        updatedQuestions[index].choices = updatedQuestions[index].choices || [
+          '',
+          '',
+        ];
       } else {
         updatedQuestions[index].choices = null;
       }
@@ -62,9 +75,30 @@ const QuestionnaireBuilder = ({ questionnaire }) => {
     }
   };
 
+  const handleSubmit = async e => {
+    e.preventDefault();
+    const savingQuestionnaire = {
+      Name: questionnaireName,
+      Description: questionnaireDescription,
+      Questions: questions.map(item => ({
+        QuestionText: item.text,
+        QuestionType: item.type,
+        Choices: item.choices,
+      })),
+    };
+    if (questionnaire?.id) {
+      await updateQuestionnaire(questionnaire.id, savingQuestionnaire);
+    }
+    await saveQuestionnaire(savingQuestionnaire);
+    navigate('/');
+  };
+
   return (
-    <Container fluid className="mt-4 p-4 border border-secondary rounded">
-      <Form>
+    <Container
+      fluid
+      className="mt-4 p-4 border border-secondary rounded bg-white"
+    >
+      <Form onSubmit={handleSubmit}>
         <Container className="mb-4">
           <Form.Text as="h3">Questionnary Name</Form.Text>
           <Form.Control
@@ -171,20 +205,25 @@ const QuestionnaireBuilder = ({ questionnaire }) => {
             )}
           </Form.Group>
         ))}
-        <Button onClick={addQuestion}>Add Question</Button>
+        <Button className="mt-3" onClick={addQuestion}>
+          Add Question
+        </Button>
         <div className="mt-3 d-flex justify-content-center">
           <Button variant="success" type="submit" disabled={!questions[0].text}>
             Save Questionaire
           </Button>
         </div>
       </Form>
-      <Button onClick={() => console.log(JSON.stringify(questions))}>
-        Result
-      </Button>
     </Container>
   );
 };
 
-QuestionnaireBuilder.propTypes = {};
+QuestionnaireBuilder.propTypes = {
+  questionnaire: PropTypes.shape({
+    name: PropTypes.string,
+    description: PropTypes.string,
+    questions: PropTypes.array,
+  }),
+};
 
 export default QuestionnaireBuilder;

@@ -12,7 +12,11 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <QuestionnairesListPage /> },
       { path: '/builder', element: <CreateQuestionnairePage /> },
-      { path: '/editor', element: <EditQuestionnairePage /> },
+      {
+        path: '/editor',
+        element: <EditQuestionnairePage />,
+        children: [{ path: ':id', element: <EditQuestionnairePage /> }],
+      },
       { path: '/interactive', element: <QuestionnairePage /> },
     ],
   },

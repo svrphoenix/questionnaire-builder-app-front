@@ -6,7 +6,7 @@ import { Container } from 'react-bootstrap';
 const CreateQuestionnairePage = () => {
   return (
     <Container>
-      <h2 className="text-primary">Questionnaire Builder</h2>
+      <h2 className="page-header">Questionnaire Builder</h2>
       <QuestionnaireBuilder />
     </Container>
   );

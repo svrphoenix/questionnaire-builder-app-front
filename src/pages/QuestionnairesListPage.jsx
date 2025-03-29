@@ -25,9 +25,14 @@ const QuestionnairesListPage = () => {
 
   return (
     <Container>
-      <h2 className="text-primary">Questionnaires List</h2>
+      <h2 className="page-header">Questionnaires List</h2>
       {isLoading ? (
-        <Spinner />
+        <Container
+          fluid
+          className="vh-100 d-flex justify-content-center align-items-center"
+        >
+          <Spinner />
+        </Container>
       ) : (
         <>
           <QuestionnairesList questionnaires={questionnaires} />

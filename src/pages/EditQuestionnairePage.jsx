@@ -1,42 +1,45 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { transformQuestions } from '../helpers';
-import { Container } from 'react-bootstrap';
+import { Container, Spinner } from 'react-bootstrap';
 import QuestionnaireBuilder from '../components/QuestionnaireBuilder/QuestionnaireBuilder';
+import { getQuestionnaireDetails } from '../services/API/questionnaireServices';
+import toast from 'react-hot-toast';
+import { useParams } from 'react-router-dom';
 
 const EditQuestionnairePage = () => {
-  const mockValues = {};
-  mockValues.questions = transformQuestions([
-    {
-      QuestionText: 'What is your favorite car?',
-      QuestionType: 'single_choice',
-      Choices: [
-        { ChoiceText: 'Toyota' },
-        { ChoiceText: 'Honda' },
-        { ChoiceText: 'BMW' },
-        { ChoiceText: 'Ford' },
-      ],
-    },
-    {
-      QuestionText: 'Describe the best car.',
-      QuestionType: 'text',
-      Choices: [],
-    },
-    {
-      QuestionText: 'What important for you?',
-      QuestionType: 'multiple_choices',
-      Choices: [
-        { ChoiceText: 'Engine' },
-        { ChoiceText: 'Class' },
-        { ChoiceText: 'Color' },
-      ],
-    },
-  ]);
+  const [isLoading, setLoading] = useState(false);
+  const [questionnaire, setQuestionnaire] = useState(null);
+  const { id: activeQuestionnaireId } = useParams();
+
+  useEffect(() => {
+    const fetchQuestionnaireDetails = async id => {
+      if (!activeQuestionnaireId) {
+        toast('You dont select questionary to edit. New will be created');
+        return;
+      }
+      setLoading(true);
+      const result = await getQuestionnaireDetails(id);
+      setLoading(false);
+      result.questions = transformQuestions(result.Questions);
+      setQuestionnaire({
+        id,
+        name: result.Name,
+        description: result.Description,
+        questions: result.questions,
+      });
+    };
+    fetchQuestionnaireDetails(activeQuestionnaireId);
+  }, [activeQuestionnaireId]);
 
   return (
     <Container>
-      <h2 className="text-primary">Questionnaire Editor</h2>
-      <QuestionnaireBuilder questionnaire={mockValues} />
+      <h2 className="page-header">Questionnaire Editor</h2>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <QuestionnaireBuilder questionnaire={questionnaire} />
+      )}
     </Container>
   );
 };
