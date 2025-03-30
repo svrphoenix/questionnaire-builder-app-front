@@ -22,7 +22,7 @@ const CustomDropdownMenu = ({ quizId, onDelete }) => {
         <Dropdown.Item eventKey={`/interactive/${quizId}`}>
           Run questionnaire
         </Dropdown.Item>
-        <Dropdown.Item onClick={() => setShowModal(true)}>
+        <Dropdown.Item eventKey="#" onClick={() => setShowModal(true)}>
           Delete questionnaire
         </Dropdown.Item>
         <ConfirmNotification

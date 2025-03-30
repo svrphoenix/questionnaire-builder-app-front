@@ -4,6 +4,11 @@ import { Button, Container, Form } from 'react-bootstrap';
 import { ChoiceType } from '../../constants';
 import { useNavigate } from 'react-router-dom';
 import { saveResponses } from '../../services/API/questionnaireServices';
+import {
+  saveToLocalStorage,
+  loadFromLocalStorage,
+  removeFromLocalStorage,
+} from '../../services/localStorageService';
 
 const QuestionnaireInteractive = ({ questionnaire }) => {
   const [responses, setResponses] = useState({});
@@ -12,9 +17,19 @@ const QuestionnaireInteractive = ({ questionnaire }) => {
   const [submitted, setSubmitted] = useState(false);
   const navigate = useNavigate();
 
+  const localStorageKey = `questionnaire-${questionnaire.Id}`;
+
   useEffect(() => {
+    const savedResponses = loadFromLocalStorage(localStorageKey);
+    if (savedResponses) {
+      setResponses(savedResponses);
+    }
     setStartTime(Date.now());
-  }, [questionnaire]);
+  }, [localStorageKey, questionnaire]);
+
+  useEffect(() => {
+    saveToLocalStorage(localStorageKey, responses);
+  }, [localStorageKey, responses]);
 
   const handleInputChange = (questionId, choiceId, isChecked) => {
     setResponses(prevResponses => {
@@ -65,6 +80,7 @@ const QuestionnaireInteractive = ({ questionnaire }) => {
 
     await saveResponses(questionnaire.Id, formattedResponses);
     setSubmitted(true);
+    removeFromLocalStorage(localStorageKey);
   };
 
   return (
@@ -88,6 +104,7 @@ const QuestionnaireInteractive = ({ questionnaire }) => {
               {question.QuestionType === ChoiceType.text && (
                 <Form.Control
                   type="text"
+                  value={responses[question.Id] || ''}
                   onChange={e => handleInputChange(question.Id, e.target.value)}
                 />
               )}
@@ -97,13 +114,18 @@ const QuestionnaireInteractive = ({ questionnaire }) => {
                   {question.Choices.map(choice => (
                     <Form.Check
                       key={choice.Id}
+                      id={`choice-${choice.Id}`}
                       type={
                         question.QuestionType === ChoiceType.single
                           ? 'radio'
                           : 'checkbox'
                       }
-                      name={`question-${question.Id}`}
                       label={choice.ChoiceText}
+                      checked={
+                        Array.isArray(responses[question.Id])
+                          ? responses[question.Id].includes(choice.Id)
+                          : responses[question.Id] === choice.Id
+                      }
                       onChange={e =>
                         handleInputChange(
                           question.Id,

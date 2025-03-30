@@ -4,7 +4,7 @@ import QuestionnairesListPage from '../pages/QuestionnairesListPage';
 import CreateQuestionnairePage from '../pages/CreateQuestionnairePage';
 import QuestionnairePage from '../pages/QuestionnairePage';
 import EditQuestionnairePage from '../pages/EditQuestionnairePage';
-import NotFoundPage from '../pages/NotFoundPage/NotFoundPage';
+import NotFoundPage from '../pages/NotFoundPage';
 
 const router = createBrowserRouter([
   {
