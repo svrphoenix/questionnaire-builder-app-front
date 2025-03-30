@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    { "source": "/builder", "destination": "/" },
+    { "source": "/editor/:id", "destination": "/" },
+    { "source": "/interactive/:id", "destination": "/" },
+    { "source": "/(.*)", "destination": "/" }
+  ]
+}
