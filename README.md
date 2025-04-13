@@ -69,7 +69,7 @@ with responsive and dynamic features.
 ## Backend Repository
 
 Check out the backend code at: [Questionnaire Builder App Backend Repository]
-(https://github.com/svrphoenix/questionnaire-builder-app-back)
+(https://github.com/svrphoenix/questionnaire-builder-app-back/README.md)
 
 ## License
 
